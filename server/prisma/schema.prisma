@@ -1,29 +1,27 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
   id             Int        @id @default(autoincrement())
-  fullname       String     @db.VarChar(255)
-  email          String     @unique @db.VarChar(255)
-  username       String?    @unique @db.VarChar(255)
-  password       String     @db.VarChar(255)
-  bio            String?    @db.Text
-  image          String?    @db.VarChar(255)
-  imageId        String?    @db.VarChar(255)
-  followingCount Int        @default(0) @db.Integer
-  followerCount  Int        @default(0) @db.Integer
-  postCount      Int        @default(0) @db.Integer
+  fullname       String
+  email          String     @unique
+  username       String?    @unique
+  password       String
+  bio            String?
+  image          String?
+  imageId        String?
+  followingCount Int        @default(0)
+  followerCount  Int        @default(0)
+  postCount      Int        @default(0)
   createAt       DateTime   @default(now())
   posts          Post[]
   comments       Comment[]
@@ -37,11 +35,11 @@ model Post {
   id           Int        @id @default(autoincrement())
   userId       Int
   user         User       @relation(fields: [userId], references: [id])
-  image        String     @db.VarChar(255)
-  imageId      String     @db.VarChar(255)
-  caption      String     @db.Text
-  commentCount Int        @default(0) @db.Integer
-  likeCount    Int        @default(0) @db.Integer
+  image        String
+  imageId      String
+  caption      String
+  commentCount Int        @default(0)
+  likeCount    Int        @default(0)
   createAt     DateTime   @default(now())
   comments     Comment[]
   likes        Likes[]
@@ -54,7 +52,7 @@ model Comment {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId   Int
   post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  content  String   @db.Text
+  content  String
   createAt DateTime @default(now())
 }
 
